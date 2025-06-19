@@ -6,19 +6,12 @@ export default function ProjectsPage() {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
-  const GITHUB_TOKEN =
-    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;
 
   useEffect(() => {
     const fetchRepos = async () => {
       try {
         const response = await fetch(
-          "https://api.github.com/users/kacperbieganski/repos",
-          {
-            headers: {
-              Authorization: `token ${GITHUB_TOKEN}`,
-            },
-          }
+          "https://api.github.com/users/kacperbieganski/repos"
         );
         if (!response.ok) throw new Error("Błąd sieci");
 
