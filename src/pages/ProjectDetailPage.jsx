@@ -35,7 +35,6 @@ export default function ProjectDetailPage() {
 
   return (
     <div className="project-detail-page">
-      <h1>{repoName}</h1>
       {loading ? <p>Ładowanie...</p> : <ReactMarkdown>{readme}</ReactMarkdown>}
     </div>
   );

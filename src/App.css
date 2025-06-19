@@ -84,7 +84,7 @@
 .projects-page li {
   box-sizing: border-box;
   background-color: #1d1d1d;
-  border: 2px solid #363636;
+  border: 2px solid #f7ff8352;
   border-radius: 10px;
   margin-bottom: 1.5rem;
   padding: 10px;
@@ -127,4 +127,10 @@
   margin: auto;
   max-width: 1600px;
   overflow-x: auto;
+}
+
+.project-detail-page pre {
+  background-color: rgba(0, 0, 0, 0.404);
+  border: 1px solid #363636;
+  padding: 10px 10px;
 }

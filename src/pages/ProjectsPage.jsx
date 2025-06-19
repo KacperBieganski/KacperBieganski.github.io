@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 
 export default function ProjectsPage() {
   const [repos, setRepos] = useState([]);
@@ -21,7 +21,23 @@ export default function ProjectsPage() {
           .filter((repo) => repo.name !== "kacperbieganski.github.io")
           .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
 
-        setRepos(filtered);
+        const reposWithPages = await Promise.all(
+          filtered.map(async (repo) => {
+            const pageUrl = `https://kacperbieganski.github.io/${repo.name}`;
+            try {
+              const res = await fetch(pageUrl, { method: "HEAD" });
+              if (res.ok) {
+                return { ...repo, pageUrl };
+              } else {
+                return repo;
+              }
+            } catch {
+              return repo;
+            }
+          })
+        );
+
+        setRepos(reposWithPages);
       } catch (err) {
         console.error("Błąd podczas pobierania repozytoriów:", err);
       } finally {
@@ -71,7 +87,18 @@ export default function ProjectsPage() {
                   aria-label="GitHub link"
                 >
                   <FaGithub size={20} />
-                </a>
+                </a>{" "}
+                {repo.pageUrl && (
+                  <a
+                    href={repo.pageUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub Pages link"
+                    style={{ marginLeft: 8 }}
+                  >
+                    <FaExternalLinkAlt size={18} />
+                  </a>
+                )}
               </p>
               <p>{repo.description || "Brak opisu"}</p>
               <p>
