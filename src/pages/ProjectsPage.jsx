@@ -31,7 +31,7 @@ export default function ProjectsPage() {
               } else {
                 return repo;
               }
-            } catch {
+            } catch (error) {
               return repo;
             }
           })
@@ -80,25 +80,27 @@ export default function ProjectsPage() {
                 <Link to={`/projects/${repo.name}`}>
                   <strong>{repo.name}</strong>
                 </Link>{" "}
-                <a
-                  href={repo.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="GitHub link"
-                >
-                  <FaGithub size={20} />
-                </a>{" "}
-                {repo.pageUrl && (
+                <span>
+                  {repo.pageUrl && (
+                    <a
+                      href={repo.pageUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="GitHub Pages link"
+                      style={{ marginLeft: 8 }}
+                    >
+                      <FaExternalLinkAlt size={18} />
+                    </a>
+                  )}
                   <a
-                    href={repo.pageUrl}
+                    href={repo.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="GitHub Pages link"
-                    style={{ marginLeft: 8 }}
+                    aria-label="GitHub link"
                   >
-                    <FaExternalLinkAlt size={18} />
+                    <FaGithub size={20} />
                   </a>
-                )}
+                </span>
               </p>
               <p>{repo.description || "Brak opisu"}</p>
               <p>
