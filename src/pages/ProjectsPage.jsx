@@ -6,12 +6,18 @@ export default function ProjectsPage() {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
+  const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN;
 
   useEffect(() => {
     const fetchRepos = async () => {
       try {
         const response = await fetch(
-          "https://api.github.com/users/kacperbieganski/repos"
+          "https://api.github.com/users/kacperbieganski/repos",
+          {
+            headers: {
+              Authorization: `token ${GITHUB_TOKEN}`,
+            },
+          }
         );
         if (!response.ok) throw new Error("Błąd sieci");
 

@@ -116,8 +116,11 @@
   font-size: 18px;
 }
 
-.projects-page li a:nth-child(2) {
+.projects-page li span {
   margin: 0 15px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
 /* -------------------- project-detail-page -------------------- */
