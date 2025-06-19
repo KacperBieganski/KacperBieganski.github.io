@@ -1,0 +1,89 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { FaGithub } from "react-icons/fa";
+
+export default function ProjectsPage() {
+  const [repos, setRepos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [sortOrder, setSortOrder] = useState("desc");
+
+  useEffect(() => {
+    const fetchRepos = async () => {
+      try {
+        const response = await fetch(
+          "https://api.github.com/users/kacperbieganski/repos"
+        );
+        if (!response.ok) throw new Error("Błąd sieci");
+
+        const data = await response.json();
+
+        const filtered = data
+          .filter((repo) => repo.name !== "kacperbieganski.github.io")
+          .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+
+        setRepos(filtered);
+      } catch (err) {
+        console.error("Błąd podczas pobierania repozytoriów:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRepos();
+  }, []);
+
+  const sortedRepos = [...repos].sort((a, b) => {
+    const dateA = new Date(a.updated_at);
+    const dateB = new Date(b.updated_at);
+    return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+  });
+
+  return (
+    <div className="projects-page">
+      <div className="projects-header">
+        <h1>Moje projekty</h1>
+        <label>
+          Sortuj:{" "}
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="desc">Najnowsze</option>
+            <option value="asc">Najstarsze</option>
+          </select>
+        </label>
+      </div>
+
+      {loading ? (
+        <p>Ładowanie projektów...</p>
+      ) : (
+        <ul>
+          {sortedRepos.map((repo) => (
+            <li key={repo.id}>
+              <p>
+                <Link to={`/projects/${repo.name}`}>
+                  <strong>{repo.name}</strong>
+                </Link>{" "}
+                <a
+                  href={repo.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub link"
+                >
+                  <FaGithub size={20} />
+                </a>
+              </p>
+              <p>{repo.description || "Brak opisu"}</p>
+              <p>
+                <small>
+                  Aktualizowano:{" "}
+                  {new Date(repo.updated_at).toLocaleDateString()}
+                </small>
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
